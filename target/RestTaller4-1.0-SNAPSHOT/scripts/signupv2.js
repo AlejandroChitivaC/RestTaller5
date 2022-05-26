@@ -1,23 +1,32 @@
 var foto = document.getElementById("foto-file");
+var api_url=`./api/users/add`;
+var cloud_url = "https://api.cloudinary.com/v1_1/dilwbkj5s/upload";
+var cloud_upload = "cl2yqfni";
+let pic = "";
 
-  var cloud_url = "https://api.cloudinary.com/v1_1/dilwbkj5s/upload";
-  var cloud_upload = "cl2yqfni";
-  let pic = "";
+foto.addEventListener("change", function (e) {
+  let file = e.target.files[0];
+  let formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", cloud_upload);
 
-  foto.addEventListener("change", function (e) {
-    let file = e.target.files[0];
-    let formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", cloud_upload);
+  axios({
+    url: cloud_url,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    data: formData,
+  })
+      axios({
+        url: api_url,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data: formData,
+      })
 
-    axios({
-      url: cloud_url,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: formData,
-    })
 
       .then(function (response) {
         console.log(response);
@@ -27,7 +36,7 @@ var foto = document.getElementById("foto-file");
       .catch(function (error) {
         console.log(error);
       });
-  });
+});
 
 var getData = function () {
   var name = document.getElementById("name").value;
@@ -43,7 +52,7 @@ var getData = function () {
   console.log(name, username, email, password, rpassword, rol, fcoins, pic)
 
   alert(
-    "Hola, " + name, + " tu username es:" + username, + "tu saldo de Fcoins es " + fcoins
+      "Hola, " + name, + " tu username es:" + username, + "tu saldo de Fcoins es " + fcoins
   );
 
   console.log(pic);
@@ -54,7 +63,7 @@ var getData = function () {
       name: name.value,
       username: username.value,
       email: email.value,
-      // foto: foto.value,
+      foto: foto.value,
       password: password.value,
       rpassword: rpassword.value,
       rol: rol.value,
@@ -64,4 +73,3 @@ var getData = function () {
     JSON.stringify(obj);
   });
 };
-
